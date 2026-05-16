@@ -1,0 +1,44 @@
+# CI/CD Laravel - GitHub Actions ke VPS
+
+## 1. Struktur Overview
+
+```
+GitHub Push → GitHub Actions → SSH ke VPS → Pull Code → Rebuild Docker → Done
+```
+
+---
+
+## 2. Setup GitHub Secrets
+
+Buka repo GitHub → **Settings** → **Secrets and variables** → **Actions** → **New repository secret**
+
+| Secret Name | Nilai |
+|-------------|-------|
+| `HOST` | IP VPS kamu (misal: `123.456.789.0`) |
+| `USERNAME` | User SSH VPS (misal: `root` atau `ubuntu`) |
+| `SSH_KEY` | Private key SSH (isi konten file `~/.ssh/id_rsa`) |
+
+### Generate SSH Key (jika belum punya)
+
+```bash
+# Di local machine
+ssh-keygen -t rsa -b 4096 -C "github-actions"
+```
+
+### Tambahkan public key ke VPS
+
+```bash
+ssh-copy-id -i ~/.ssh/id_rsa.pub user@IP_VPS
+```
+
+### Isi SECRET SSH_KEY dengan
+
+```bash
+cat ~/.ssh/id_rsa   # copy semua outputnya
+```
+
+### Cek SSH authorized keys
+
+```bash
+cat ~/.ssh/authorized_keys
+```
